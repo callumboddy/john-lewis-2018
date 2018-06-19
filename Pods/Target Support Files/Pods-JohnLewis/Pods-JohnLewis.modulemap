@@ -1,0 +1,6 @@
+framework module Pods_JohnLewis {
+  umbrella header "Pods-JohnLewis-umbrella.h"
+
+  export *
+  module * { export * }
+}

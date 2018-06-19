@@ -39,6 +39,6 @@ class ProductListCollectionViewCell: UICollectionViewCell {
         self.state = state
         imageView.kf.setImage(with: state.imageURL)
         titleLabel.text = state.title
-        priceLabel.text = state.price
+        priceLabel.text = "£\(state.price)"
     }
 }

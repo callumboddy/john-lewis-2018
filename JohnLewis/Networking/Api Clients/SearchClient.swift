@@ -35,11 +35,14 @@ class SearchCient: AuthenicatedClient {
     // MARK - Instance Variables
 
     let session: URLSession
+    let endpoint: String
 
     // MARK - Initialisers
 
-    init(session: URLSession = URLSession.shared) {
+    // TODO: extract constants elsewhere
+    init(session: URLSession = URLSession.shared, endpoint: String = "https://api.johnlewis.com/v1/products/search") {
         self.session = session
+        self.endpoint = endpoint
     }
 
     struct Query {
@@ -54,21 +57,20 @@ class SearchCient: AuthenicatedClient {
     ///   - completion: a generic Result object which contains and array of SearchProduct or an Error
     func fetch(matching query: Query, completion: @escaping SearchCompletion) {
 
-        // TODO: extract constants elsewhere
-        guard var endpoint = URLComponents(string: "https://api.johnlewis.com/v1/products/search") else {
+        guard var urlComponenents = URLComponents(string: endpoint) else {
             completion(.failure(SearchError.invalidEndpoint))
             return
         }
 
         // create query items
         // TODO: extract to a generic helper function
-        endpoint.queryItems = [
+        urlComponenents.queryItems = [
             URLQueryItem(name: "q", value: query.term),
             URLQueryItem(name: "key", value: apiKey()),
             URLQueryItem(name: "pageSize", value: "\(query.pageSize)")
         ]
 
-        guard let url = endpoint.url else {
+        guard let url = urlComponenents.url else {
             completion(.failure(SearchError.incompatableURL))
             return
         }
